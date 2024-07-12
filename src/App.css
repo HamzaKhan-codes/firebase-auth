@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.inc{
+  margin-top: 20px;
+  width: 8rem;
+  height: 5rem;
+  font-size: larger;
+  border-radius: 10px;
+}
+
+.back{
+  width: 4rem;
+  height: 2rem;
+  font-size: large;
+  border-radius: 5px;
+}
+.back:hover{
+  color: white;
+  background-color: black;
+  width: 4rem;
+  height: 2rem;
+  font-size: large;
+  border-radius: 5px;
+}
