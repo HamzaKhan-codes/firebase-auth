@@ -59,3 +59,18 @@
   font-size: large;
   border-radius: 5px;
 }
+
+input{
+  width: 12rem;
+  height: 1.5rem;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.reg{
+  font-size: large;
+  background-color: rgb(80, 255, 80);
+  border-radius: 5px;
+  padding: 4px;
+  margin-top: 10px;
+}
