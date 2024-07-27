@@ -2,13 +2,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export default function Detail() {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const { adId } = useParams();
   // console.log('params', params)
 
   const onBack = () => {
-    naviagate(-1);
+    navigate(-1);
   };
 
   useEffect(() => {

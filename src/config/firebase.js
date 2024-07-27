@@ -1,6 +1,10 @@
 
+import { upload } from "@testing-library/user-event/dist/upload";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBe8_mEkT8qqW7uXI7Qaov5clnUJKTq3mE",
@@ -14,36 +18,38 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-function register (email, password){
-    createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    alert("Successfully Resgistered!")
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-
-    alert(errorMessage)
-  });
+ async function register (userInfo){
+  const {email, password, fullname, age} = userInfo
+    await createUserWithEmailAndPassword(auth, email, password)
+    return addDoc(collection(db, "users"), {email, fullname, age })
 }
 
 function login (email, password){
-    signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    alert("Successfully Signed In!")
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    return signInWithEmailAndPassword(auth, email, password)
+  
+}
 
-    alert(errorMessage)
-  });
+async function addProduct(product){
+  const { title, description, price, image } = product
+
+  const storageRef = ref(storage, 'products/' +image.name)
+
+  await uploadBytes(storageRef, image)
+
+  const url = await getDownloadURL(storageRef) 
+
+  return addDoc(collection(db, "products"), {title, description, price, image: url })
 }
 
 export{
     register, 
-    login
+    login,
+    onAuthStateChanged,
+    auth,
+    addProduct
 }
 
 
