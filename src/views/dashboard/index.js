@@ -1,35 +1,59 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProducts } from "../../config/firebase";
 
-export default function Dashboard(){
-    const navigate = useNavigate()
-    const [products, setProducts] = useState([]);
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        fetch('https://fakestoreapi.com/products')
-            .then(res=>res.json())
-            .then(json=>setProducts(json))
-    }, [])
+  const goToRegister = () => {
+    navigate('/register');
+  };
 
-    console.log('products --->', products)
+  const goToLogin = () => {
+    navigate('/login');
+  };
 
-    const goToDetail = (item) => {
-        navigate(`/detail/${item.id}`)
-    }
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getProducts();
+        setProducts(products);
+      } catch (error) {
+        console.error('Failed to fetch products', error);
+      }
+    };
 
-return(
+    fetchProducts();
+  }, []);
+
+  const goToDetail = (item) => {
+    navigate(`/detail/${item.id}`);
+  };
+
+  return (
     <div>
-        <h1>Dashboard</h1>
-
-        {products.map(item => {
-            return <div
-            onClick={() => goToDetail(item)} 
-            style={{border: '1px solid gray', margin: 50}}>
-                <img src={item.image} width={100} alt="" />
-                <h4>{item.title}</h4>
-            </div>
-        })}
+      <div className="sign-btn">
+        <button className="btn" onClick={goToRegister}>Sign Up Page</button>
+        <button className="btn" onClick={goToLogin}>Login Page</button>
+      </div>
+      <h1>Dashboard</h1>
+      <hr />
+      <button onClick={() => navigate('/product')} className="btn">Add Product</button>
+      
+      <div className="product-container">
+        {products.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => goToDetail(item)}
+            className="product-card"
+          >
+            <img src={item.image} width={200} alt="" />
+            <h4>{item.title}</h4>
+            <h4>{item.price}</h4>
+          </div>
+        ))}
+      </div>
     </div>
- )
-    
+  );
 }

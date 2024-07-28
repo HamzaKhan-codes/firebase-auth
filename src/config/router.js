@@ -3,6 +3,7 @@ import Dashboard from "../views/dashboard";
 import Detail from "../Detail/detail";
 import Register from "../views/dashboard/register";
 import Login from "../views/dashboard/login";
+import AddProduct from "../views/dashboard/product";
 
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login/>,
+    },
+    {
+        path: "/product",
+        element: <AddProduct/>,
     },
 ]);
 

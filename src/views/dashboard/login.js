@@ -24,6 +24,6 @@ const signIn = async () => {
         <input placeholder="Email" className="input" onChange={e => setEmail(e.target.value)} /><br></br>
         <input placeholder="Password" className="input" onChange={e => setPassword(e.target.value)} /><br></br>
 
-        <button className="reg" onClick={() => login() }>Sign In</button>
+        <button className="reg" onClick={() => signIn() }>Sign In</button>
     </div>
 }

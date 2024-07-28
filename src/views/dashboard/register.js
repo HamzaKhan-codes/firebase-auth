@@ -6,10 +6,13 @@ export default function Register() {
     const navigate = useNavigate()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const [name, setName] = useState()
+    const [age, setAge] = useState()
 
     const signUp = async () => {
         try{
-            await register(email,password)
+            const userInfo = { email, password, name, age };
+            await register(userInfo)
             alert('Successfully Registered')
             navigate('/')
         }  catch (e) {
@@ -17,11 +20,17 @@ export default function Register() {
         }
     }  
 
-    return <div>
+    return <div >
         <h2>SignUp</h2>
-        <input placeholder="Email" className="input" onChange={e => setEmail(e.target.value)} /><br></br>
-        <input placeholder="Password" className="input" onChange={e => setPassword(e.target.value)} /><br></br>
+        <hr />
+        <div className="signup">
+            <input  placeholder="Email" type="email" className="input" onChange={e => setEmail(e.target.value)} /><br></br>
+            <input placeholder="Password" className="input" onChange={e => setPassword(e.target.value)} /><br></br>
+            <input placeholder="Full Name" type="text" className="input" onChange={e => setName(e.target.value)} /><br></br>
+            <input placeholder="Age" type="number" className="input" onChange={e => setAge(e.target.value)} /><br></br>
+        </div>
+       
 
-        <button className="reg" onClick={() => register() }>Register</button>
+        <button className="reg" onClick={() => signUp() }>Register</button>
     </div>
 }

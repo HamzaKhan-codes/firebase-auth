@@ -1,8 +1,7 @@
 
-import { upload } from "@testing-library/user-event/dist/upload";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 
@@ -22,9 +21,9 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
  async function register (userInfo){
-  const {email, password, fullname, age} = userInfo
+  const {email, password, name, age} = userInfo
     await createUserWithEmailAndPassword(auth, email, password)
-    return addDoc(collection(db, "users"), {email, fullname, age })
+    return addDoc(collection(db, "users"), {email, name, age })
 }
 
 function login (email, password){
@@ -32,24 +31,41 @@ function login (email, password){
   
 }
 
-async function addProduct(product){
-  const { title, description, price, image } = product
-
-  const storageRef = ref(storage, 'products/' +image.name)
-
-  await uploadBytes(storageRef, image)
-
-  const url = await getDownloadURL(storageRef) 
-
-  return addDoc(collection(db, "products"), {title, description, price, image: url })
+async function addProduct(product) {
+  const { title, description, price, image } = product;
+  
+  try {
+    const storageRef = ref(storage, 'products/' + image.name);
+    await uploadBytes(storageRef, image);
+    const url = await getDownloadURL(storageRef);
+    return addDoc(collection(db, "products"), { title, description, price, image: url });
+  }
+  
+  catch (error) {
+    console.error("Error adding product:", error);
+    throw error;
+  }
 }
+
+async function getProducts() {
+const querySnapshot = await getDocs(collection(db, "products"));
+const products = []
+querySnapshot.forEach((doc) => {
+  const data = doc.data()
+  data.id = doc.id
+  products.push(data)
+  });
+return products 
+}
+
 
 export{
     register, 
     login,
     onAuthStateChanged,
     auth,
-    addProduct
+    addProduct,
+    getProducts
 }
 
 
